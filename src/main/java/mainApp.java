@@ -28,7 +28,7 @@ public class mainApp {
 	static String file_stegMetaStorage = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/metaStorage.db";
 	static String stegFolder = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/stegdrop/";
 	static String googleAuth_2AF = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/GA_2AF_SK.key";
-	public static String stegFSPartition = "/mnt/stegfs-2/";
+	static String stegFSPartition = "/mnt/stegfs-2/"; // adjust this to your partition
 
 	
 	/**
