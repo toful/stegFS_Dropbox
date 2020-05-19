@@ -15,15 +15,17 @@ public class mainApp {
 	
 	static String authToken ="";
 
-	/**static String file_2AF = "file:///C:/KEYSTORE/keyfile.txt";
-	static String file_stegMetaStorage = "C:/KEYSTORE/metaStorage.db";
-	static String stegFolder = "C:/stegdrop/";
-	**/
 	static String file_2AF = "file:///home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/keyfile.txt";
 	static String file_stegMetaStorage = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/metaStorage.db";
 	static String stegFolder = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/stegdrop/";
 	static String googleAuth_2AF = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/GA_2AF_SK.key";
 
+	
+	/**
+	 * Get all files that are present in a directory
+	  @param input The path to the directory
+	  @return An array holding all files of a specific type
+	*/
 	public static File[] getFiles(File input){
 		// if input is a directory, return all files
 		if (input.isDirectory()) {
