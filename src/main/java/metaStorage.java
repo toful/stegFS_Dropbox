@@ -21,6 +21,9 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SealedObject;
 import javax.crypto.spec.SecretKeySpec;
+
+import stegfs_dropbox.metadata;
+
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -65,6 +68,18 @@ public class metaStorage implements java.io.Serializable {
 
 	
 	/**
+     * Get the salt of a specific file from metadata storage
+     * @return salt
+     */
+	public static String getSalt(String filename) {
+		
+		String salt = metaStorage.get(filename).getSalt();
+	
+		return salt;
+	}
+	
+	
+	/**
      * Check if a key (filename) is present in the metadata storage
      * @return containsKey
      */
@@ -78,6 +93,15 @@ public class metaStorage implements java.io.Serializable {
 	}
 	 
 
+	/**
+     * Get metadata to a corresponding filename
+     * @return metadata
+     */
+	public static metadata get(String filename) {
+		return  metaStorage.get(filename);
+		
+	}
+	
 	
 	/**
      * Remove a single dataset from metadata storage

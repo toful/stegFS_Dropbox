@@ -21,7 +21,7 @@ public class metadata implements java.io.Serializable {
 	 * Get salt
 	 * @return time
 	 */
-	public static String getsalt() {
+	public static String getSalt() {
 		return salt;
 	}
 

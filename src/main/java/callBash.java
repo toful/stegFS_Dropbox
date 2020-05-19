@@ -1,4 +1,4 @@
-package stegfs_dropbox;
+// package stegfs_dropbox;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,7 +34,7 @@ public class callBash {
             while ( (line = br.readLine()) != null )
                 output.add(line);
 
-            //There should really be a timeout here.
+            // return if something was done, TODO: add a timeout
             if (0 != process.waitFor())
                 return null;
 
@@ -55,21 +55,21 @@ public class callBash {
      */
 	public static void createRamDisk() {
 			
-			command("mkdir /mnt/StegDrop; "
-				  + "mount -t ramfs ramfs /mnt/StegDrop");
+			// create a ramdisk and mount it to the stegdrop folder
+			command("mount -t ramfs ramfs " + mainApp.stegFolder);
 		}
 	
 	
 	 /**
      * Erase content on the ram disk using the Gutmann method
-     * 
+     * BE CAREFUL, IT FULLY DESTROYS stegFolder ;-)
      */
 	public static void destroyRamDisk() {
 			
 			// Gutmann file erase: find all content on /mnt/ramdisk, force to write 50 times randomly, then all zeros
 			// http://manpages.ubuntu.com/manpages/trusty/man1/shred.1.html
-			command("find /mnt/StegDrop -type f -print0 | xargs -0 shred -fuz n- 50 -u;"
-					+ "rm -r /mnt/StegDrop/*"); // remove empty sub-directories
+			command("find " + mainApp.stegFolder + " -type f -print0 | xargs -0 shred -fuz n- 50 -u;"
+					+ "rm -r " + mainApp.stegFolder +"/*"); // remove empty sub-directories
 		}
 	
 	
@@ -80,7 +80,7 @@ public class callBash {
 	public static void writeToStegFS(String file_auth) {
 			
 			String filename = file_auth.split(":")[0];
-			command("cp /mnt/StegDrop/" + filename + " /mnt/stegfs-2/" + file_auth);
+			command("cp " + mainApp.stegFolder + filename + " " + mainApp.stegFSPartition + file_auth);
 			System.out.println("Write to stegfs: " + file_auth);
 				
 		}
@@ -93,7 +93,7 @@ public class callBash {
 	public static void readFromStegFS(String file_auth) {
 		System.out.println(file_auth);
 			String filename = file_auth.split(":")[0];
-			command("cp /mnt/stegfs-2/" + file_auth + " /mnt/StegDrop/" + filename);
+			command("cp " + mainApp.stegFSPartition + file_auth + " "+ mainApp.stegFolder + filename);
 			System.out.println(filename + " fetched from stegfs");
 				
 		}
