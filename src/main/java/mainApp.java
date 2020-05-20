@@ -29,133 +29,21 @@ public class mainApp {
 	static String stegFolder = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/stegdrop/";
 	static String googleAuth_2AF = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/GA_2AF_SK.key";
 	static String stegFSPartition = "/mnt/stegfs-2/"; // adjust this to your partition
-
 	
-	/**
-	 * Get all files that are present in a directory
-	  @param input The path to the directory
-	  @return An array holding all files of a specific type
+	/*
+	static String file_2AF = "/mnt/share/keyfile.txt";
+	static String file_stegMetaStorage = "/mnt/share/metaStorage.db";
+	static String stegFolder = "/mnt/StegDrop/";
+	static String googleAuth_2AF = "/mnt/share/GA_2AF_SK.key";
+	static String stegFSPartition = "/mnt/stegfs-2/";	
 	*/
-	public static File[] getFiles(File input){
-		// if input is a directory, return all files
-		if (input.isDirectory()) {
-            return input.listFiles(new FilenameFilter() {
-                public boolean accept(File dir, String filename) {
-                	return filename.endsWith(".txt");
-                }
-            });
-        }
-        else {
-            // else return an empty array
-            return new File[0];
-        }
-	}
-	
-	
-	/**
-	 * Scan a directory for files
-	  @param directory the path were to scan
-	 * 
-	*/
-	public static void scanDirectory(String directory) throws Exception{
-		
-		File dropDirectory = new File (directory);
-		File[] files = getFiles(dropDirectory);
-		if(files.length!=0) {
-			System.out.println("Found " + files.length + " files");
-		}
-		// loop through every file
-		for (int i=0; i<files.length; i++) {
-			//process file
-			processFile(files[i]);
-		}
-	}
-	
-	
-	/**
-	 * Process a file
-	 * check if it is already stored. 
-	 * 		if yes: ignore. 
-	 * 		if not: generate a random salt, add it to the metadata store, generate a per-file authenticator, then write the file to stegFS
-	  
-	  @param input The path to the directory
-	 * 
-	*/
-	public static void processFile(File file) throws Exception {
-		
-		// check if a file is already stored in metaStorage, add if not
-		metaStorage.loadDecrypt( file_stegMetaStorage );
-		
-		if (metaStorage.contains(file.getName())){
-			System.out.println("already stored");
-		}
-		else {
-			// generate a random salt, add it to the metadata store, encrypt the metadata store , generate a per-file authenticator from (authToken XOR salt), then write the file to stegFS
-			String salt = Auth.getRandomSalt();
-			metaStorage.add(file.getName(), new metadata(salt));
-			System.out.println("file " + file.getName() + " added to storage");
-			
-			// update metadata storage to disk
-			metaStorage.saveEncrypted( file_stegMetaStorage );
-			
-			//write the file to stegfs
-			//stegfs write filename:
-			
-			String passPerFile = Auth.calcPassPerFile(authToken, salt);
-			callBash.writeToStegFS(file.getName() + ":" + authToken); //TODO: change to passperfile (static token used for testing)
-			System.out.println("Write to stegfs: " + file.getName() + ":" + passPerFile);
-		}
-	}
-	
-	
-	/**
-	 * Print a list of all files stored in the metadata storage
-	 * 
-	*/
-	public static void printFiles(){
-		List<String> listOfFiles = metaStorage.getAllFiles();
-		System.out.println("List of files:");
-		for (int i=0; i<listOfFiles.size(); i++) {
-			System.out.println("Filename: " + listOfFiles.get(i));
-		}
-	}
-	
-	
-	/**
-	 * Get all files from the steganographic file system
-	 * Used at launch in order to copy all files from stegFS to the DropSteg folder on ram-disk
-	 * 
-	*/
-	public static void readAllFromFS() throws InvalidKeyException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchPaddingException, BadPaddingException, IOException {
-		
-		// decrypt the metadata storage and get a list of all files
-		metaStorage.loadDecrypt("/mnt/share/metaStorage.db");
-		List<String> listOfFiles = metaStorage.getAllFiles();
-		
-		// loop through the list of all files and fetch the metadata of each file
-		for (int i=0; i<listOfFiles.size(); i++) {
-			String filename = listOfFiles.get(i);
-			
-			/* TODO: change static authToken to token XOR salt
-			String salt = metaStorage.getSalt(filename);
-			// only proceed if salt is available
-			if (salt !=null) {
-			String passPerFile = Auth.calcPassPerFile(authToken, salt);
-			*/
-			
-			// get file from stegFS and write it to the stegdrop folder
-			callBash.readFromStegFS(filename + ":" + authToken);
-			
-		}
-		
-	}
-	
-	
 	
 	
 	public static void main(String[] args) throws Exception {
 
-		// AUTHENTICATION
+		/**
+		* AUTHENTICATION
+		*/
 		// password authentication
 		//String password = Auth.getPassword();
 		String password = "f0e4c2f76c58916ec258f246851bea091d14d4247a2fc3e18694461b1816e13b"; //fixed password for testing
@@ -198,16 +86,28 @@ public class mainApp {
 		System.out.println("2AF is correct");
 		///////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		// STORAGE
-		// scan drop-directory regularly, add new files to metadata storage, ignore existing files
+		/**
+		* STORAGE
+		* 
+		* - fetch files from steganographic storage to StegDrop
+		* - regularly scan the StegDrop directory for new files
+		* - add new files to steganographic storage
+		* - save and encrypt metadata 
+		*/
 		
+		// erase the metadata storage. used for a full reset of all files stored.
+		// metaStorage.erase();
 		
-		// metaStorage.erase(); // erase storage for testing
-		// createRamDisk(); // creates a ramdisk
-		// readAllFromFS(); // reads all files from stegfs
+		// create a ram-disk where the StegDrop directory is located on
+		// createRamDisk();
 		
-		while (1==1) { // daemon to run in background, TODO: change to while(keyfile pendrive is connected)
-			scanDirectory(stegFolder);
+		// import all files from steganographic storage to the StegDrop folder
+		fileOperations.importFromStegFs(); 
+		
+		// StegDrop daemon
+		while (1==1) { // TODO: change to while(keyfile pendrive is connected) to implement kill-switch functionality
+			
+			fileOperations.scanDirectory(stegFolder);
 			TimeUnit.SECONDS.sleep(10);
 		}
 	
