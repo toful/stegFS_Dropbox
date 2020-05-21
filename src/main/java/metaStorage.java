@@ -122,8 +122,12 @@ public class metaStorage implements java.io.Serializable {
      	* Empty storage is then saved to disk
     	*/
 	public static void erase() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IOException {
+		
 		metaStorage = new HashMap<String, metadata>();
-		//saveEncrypted("C:/KEYSTORE/metaStorage.db");
+		layer0Storage = new HashMap<String, metadata>();
+		layer1Storage = new HashMap<String, metadata>();
+		layer2Storage = new HashMap<String, metadata>();
+		
 		saveEncrypted( mainApp.file_stegMetaStorage );
 	}
 	
