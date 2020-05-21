@@ -43,7 +43,6 @@ public class metaStorage implements java.io.Serializable {
 	// Sub-layer metadata storages
 	static Map<String, metadata> layer0Storage = new HashMap<String, metadata>();
 	static Map<String, metadata> layer1Storage = new HashMap<String, metadata>();
-	static Map<String, metadata> layer2Storage = new HashMap<String, metadata>();
 	
 	
 	metaStorage(){
@@ -117,52 +116,52 @@ public class metaStorage implements java.io.Serializable {
 	}
 	
 	
-	/**
-     	* Permanently erase the full metadata storage
-     	* Empty storage is then saved to disk
-    	*/
+		/**
+     * Permanently erase the full metadata storage
+	 * Empty storage is then saved to disk
+     */
 	public static void erase() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IOException {
-		
-		metaStorage = new HashMap<String, metadata>();
+		 metaStorage = new HashMap<String, metadata>();
 		layer0Storage = new HashMap<String, metadata>();
 		layer1Storage = new HashMap<String, metadata>();
-		layer2Storage = new HashMap<String, metadata>();
 		
 		saveEncrypted( mainApp.file_stegMetaStorage );
 	}
 	
 	
 	/**
-	* Switch storage layers by linking a sub-layer to metaStorage
-	*
-	*/
-	public static void switchLayer(String accessToken) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IOException, ClassNotFoundException, BadPaddingException {
+     * Switch storage layers by linking a sub-layer to metaStorage
+	 *
+     */
+	public static void switchLayer() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IOException, ClassNotFoundException, BadPaddingException {
 		
 		loadDecrypt(mainApp.file_stegMetaStorage);
-		String accessTokenL1 = mainApp.accessTokenL1;
-		
-		// switch to layer 1
-		if (accessToken.equals(mainApp.accessTokenL1)) {
+	
+			// switch to layer 1
+		if (mainApp.currentLayer == 0) {
+			
 			layer0Storage = metaStorage;
 			metaStorage = layer1Storage;
+			
 			System.out.println("Switched to layer 1");
+			mainApp.currentLayer =1;
 			saveEncrypted( mainApp.file_stegMetaStorage );
 		}
-		// switch to layer 2
-		else if (accessToken.equals(mainApp.accessTokenL2)) {
-			layer0Storage = metaStorage;
-			metaStorage = layer2Storage;
-			System.out.println("Switched to layer 2");
+				
+		// switch to default layer 0
+		else if (mainApp.currentLayer == 1) {
+			
+			layer1Storage = metaStorage;
+			metaStorage = layer0Storage;
+			
+			System.out.println("Switched to layer 0");
+			mainApp.currentLayer = 0;
 			saveEncrypted( mainApp.file_stegMetaStorage );
 		}
 		
-		// switch to default layer 0
-		else {
-			metaStorage = layer0Storage;
-			System.out.println("Switched to layer 0");
-			saveEncrypted( mainApp.file_stegMetaStorage );
-		}
 	}
+	
+	
 	
 	 /**
 	 * Encrypt (AES) and save the metadata storage to disk
@@ -173,20 +172,7 @@ public class metaStorage implements java.io.Serializable {
 		 System.out.println("Saving encrypted metadata storage to " + path);
 		 // encrypt the metaStorage
 		 FileOutputStream fileOut = new FileOutputStream(path);
-		 encrypt( (Serializable) metaStorage, fileOut);
-	 }
- 
- 
- 	 /**
-	 * Encrypt (AES) and save the metadata storage including all layers to disk
-	 * 
-	 * @param path where the file should be stored
-	*/
-	 public static void saveEncrypted(String path) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
-		 System.out.println("Saving encrypted metadata storage to " + path);
-		 // encrypt the metaStorage
-		 FileOutputStream fileOut = new FileOutputStream(path);
-		 encrypt( (Serializable) metaStorage, (Serializable) layer0Storage, (Serializable) layer1Storage, (Serializable) layer2Storage, fileOut);
+		 encrypt( (Serializable) metaStorage, (Serializable) layer0Storage, (Serializable) layer1Storage, (Serializable) mainApp.currentLayer, fileOut);
 	 }
  
  
@@ -195,7 +181,7 @@ public class metaStorage implements java.io.Serializable {
 	 * AES encryption
 	 * 
 	*/
-	public static void encrypt(Serializable metaStorage, Serializable layer0Storage, Serializable layer1Storage, Serializable layer2Storage, OutputStream ostream) 
+	public static void encrypt(Serializable metaStorage, Serializable layer0Storage, Serializable layer1Storage, Serializable currentLayer, OutputStream ostream) 
 			throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException {
 
 		byte[] key = mainApp.authToken.substring(0, 32).getBytes(); // to match the max AES key length of 32 bytes
@@ -207,11 +193,11 @@ public class metaStorage implements java.io.Serializable {
 			 // AES ECB mode with PKCS5
 			 Cipher cipher = Cipher.getInstance(algorithm);
 			 cipher.init(Cipher.ENCRYPT_MODE, sks);
-			 // encrypt metaStorage, layer0, layer1, layer2
 			 SealedObject sealedObject = new SealedObject(metaStorage, cipher);
 			 SealedObject sealedObject0 = new SealedObject(layer0Storage, cipher);
 			 SealedObject sealedObject1 = new SealedObject(layer1Storage, cipher);
-			 SealedObject sealedObject2= new SealedObject(layer2Storage, cipher);
+			 SealedObject sealedObject2 = new SealedObject(currentLayer, cipher);
+			
 
 			 // write to disk
 			 CipherOutputStream cos = new CipherOutputStream(ostream, cipher);
@@ -261,16 +247,18 @@ public class metaStorage implements java.io.Serializable {
 		SealedObject sealedObject1;
 		SealedObject sealedObject2;
 
+
 		try {
-			//write decrypted input to metaStorage, layer0, layer1, layer2
+			//write decrypted input to metaStorage
 			sealedObject = (SealedObject) inputStream.readObject();
 			sealedObject0 = (SealedObject) inputStream.readObject();
 			sealedObject1 = (SealedObject) inputStream.readObject();
 			sealedObject2 = (SealedObject) inputStream.readObject();
+
 			metaStorage = (Map<String, metadata>) sealedObject.getObject(cipher);
 			layer0Storage = (Map<String, metadata>) sealedObject0.getObject(cipher);
 			layer1Storage = (Map<String, metadata>) sealedObject1.getObject(cipher);
-			layer2Storage = (Map<String, metadata>) sealedObject2.getObject(cipher);
+			mainApp.currentLayer = (int) sealedObject2.getObject(cipher);
 			inputStream.close();
 			System.out.println("Loading and decrypting metadata storage done");
 
@@ -278,6 +266,7 @@ public class metaStorage implements java.io.Serializable {
 			e.printStackTrace();
 		}
 	}
+
 
 }
 
