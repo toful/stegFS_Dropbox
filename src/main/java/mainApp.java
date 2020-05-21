@@ -23,6 +23,7 @@ import javax.crypto.NoSuchPaddingException;
 public class mainApp {
 	
 	static String authToken ="";
+	static int currentLayer = 0;
 	static  String accessTokenL1 = "1"; //TODO: generate access token from user input + auth token
 	static  String accessTokenL2 = "2";
 	
