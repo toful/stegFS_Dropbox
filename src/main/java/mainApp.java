@@ -23,6 +23,9 @@ import javax.crypto.NoSuchPaddingException;
 public class mainApp {
 	
 	static String authToken ="";
+	static  String accessTokenL1 = "1"; //TODO: generate access token from user input + auth token
+	static  String accessTokenL2 = "2";
+	
 
 	static String file_2AF = "file:///home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/keyfile.txt";
 	static String file_stegMetaStorage = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/metaStorage.db";
