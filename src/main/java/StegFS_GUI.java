@@ -18,6 +18,14 @@ public class StegFS_GUI extends JFrame{
     static String stegFolder = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/stegdrop/";
     static String googleAuth_2AF = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/GA_2AF_SK.key";
     static String stegFSPartition = "/mnt/stegfs-2/"; // adjust this to your partition
+    
+    /*
+	static String file_2AF = "/mnt/share/keyfile.txt";
+	static String file_stegMetaStorage = "/mnt/share/metaStorage.db";
+	static String stegFolder = "/mnt/StegDrop/";
+	static String googleAuth_2AF = "/mnt/share/GA_2AF_SK.key";
+	static String stegFSPartition = "/mnt/stegfs-2/";	
+	*/
 
     static String authToken ="";
     static int currentLayer = 0;
@@ -130,15 +138,8 @@ public class StegFS_GUI extends JFrame{
     }
 
     public void runStegFS() throws Exception {
-        ///////////////////////////////Temporal
-        mainApp.authToken = authToken;
-        mainApp.file_2AF = file_2AF;
-        mainApp.file_stegMetaStorage = file_stegMetaStorage;
-        mainApp.stegFolder = stegFolder;
-        mainApp.googleAuth_2AF = googleAuth_2AF;
-        mainApp.stegFSPartition = stegFSPartition; // adjust this to your partition
-        ////////////////////////////////
-        System.out.println( "System is running");
+        
+        System.out.println( "DropSteg is starting");
         new StegFS_Thread().start();
     }
 
