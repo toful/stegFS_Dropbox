@@ -43,7 +43,7 @@ public class fileOperations {
 		File dropDirectory = new File (directory);
 		File[] files = getFiles(dropDirectory);
 		if(files.length!=0) {
-			System.out.println("Found " + files.length + " files");
+		//	System.out.println("STEGDROP - Found " + files.length + " new file(s)");
 		}
 		// loop through every file
 		for (int i=0; i<files.length; i++) {
@@ -68,13 +68,13 @@ public class fileOperations {
 		metaStorage.loadDecrypt(mainApp.file_stegMetaStorage );
 		
 		if (metaStorage.contains(file.getName())){
-			System.out.println("already stored");
+		
 		}
 		else {
 			// generate a random salt, add it to the metadata store, encrypt the metadata store , generate a per-file authenticator from (authToken XOR salt), then write the file to stegFS
 			String salt = Auth.getRandomSalt();
 			metaStorage.add(file.getName(), new metadata(salt));
-			System.out.println("file " + file.getName() + " added to storage");
+			System.out.println("STEGDROP - file " + file.getName() + " added to metadata storage");
 			
 			// update metadata storage to disk
 			metaStorage.saveEncrypted(mainApp.file_stegMetaStorage );
@@ -84,7 +84,8 @@ public class fileOperations {
 			
 			String passPerFile = Auth.calcPassPerFile(mainApp.authToken, salt);
 			callBash.writeToStegFS(file.getName() + ":" + mainApp.authToken); //TODO: change to passperfile (static token used for testing)
-			System.out.println("Write to stegfs: " + file.getName() + ":" + passPerFile);
+			System.out.println("STEGDROP - file" + file.getName() + " saved to steganographic storage. Secret: " + passPerFile );
+			System.out.println();
 		}
 	}
 	
@@ -112,7 +113,10 @@ public class fileOperations {
 	public static void importFromStegFs() throws InvalidKeyException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchPaddingException, BadPaddingException, IOException {
 		
 		// decrypt the metadata storage and get a list of all files
+		System.out.println("STEGDROP - Decrypting metadata storage (" + mainApp.file_stegMetaStorage + ")" );
 		metaStorage.loadDecrypt(mainApp.file_stegMetaStorage );
+		
+		System.out.println("STEGDROP - Reading all files from steganographic storage \n");
 		List<String> listOfFiles = metaStorage.getAllFiles();
 		
 		// loop through the list of all files and fetch the metadata of each file
@@ -130,6 +134,7 @@ public class fileOperations {
 			callBash.readFromStegFS(filename + ":" + mainApp.authToken);
 			
 		}
+		System.out.println("\n");
 		
 	}
 

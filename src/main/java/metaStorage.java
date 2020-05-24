@@ -169,7 +169,7 @@ public class metaStorage implements java.io.Serializable {
 	 * @param path where the file should be stored
 	*/
 	 public static void saveEncrypted(String path) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
-		 System.out.println("Saving encrypted metadata storage to " + path);
+		 System.out.println("STEGDROP - Encrypted and saved metadata storage to " + path);
 		 // encrypt the metaStorage
 		 FileOutputStream fileOut = new FileOutputStream(path);
 		 encrypt( (Serializable) metaStorage, (Serializable) layer0Storage, (Serializable) layer1Storage, (Serializable) mainApp.currentLayer, fileOut);
@@ -219,7 +219,7 @@ public class metaStorage implements java.io.Serializable {
 	 *
 	*/
 	public static void loadDecrypt (String path) throws IOException, ClassNotFoundException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, BadPaddingException {
-		System.out.println("Loading and decrypting metadata storage from " + path);
+		//System.out.println("Loading and decrypting metadata storage from " + path);
 		FileInputStream fileIn = new FileInputStream(path);// Read serial file.
 		decrypt(fileIn);
 	}
@@ -260,7 +260,7 @@ public class metaStorage implements java.io.Serializable {
 			layer1Storage = (Map<String, metadata>) sealedObject1.getObject(cipher);
 			mainApp.currentLayer = (int) sealedObject2.getObject(cipher);
 			inputStream.close();
-			System.out.println("Loading and decrypting metadata storage done");
+		
 
 		} catch (IllegalBlockSizeException e) {
 			e.printStackTrace();

@@ -13,34 +13,35 @@ import java.util.concurrent.TimeUnit;
 
 public class mainApp extends JFrame{
 
+	 /*
     static String file_2AF = "file:///home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/keyfile.txt";
     static String file_stegMetaStorage = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/metaStorage.db";
     static String stegFolder = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/stegdrop/";
     static String googleAuth_2AF = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/GA_2AF_SK.key";
     static String stegFSPartition = "/mnt/stegfs-2/"; // adjust this to your partition
-    
-    /*
+    */
+   
 	static String file_2AF = "/mnt/share/keyfile.txt";
 	static String file_stegMetaStorage = "/mnt/share/metaStorage.db";
 	static String stegFolder = "/mnt/StegDrop/";
 	static String googleAuth_2AF = "/mnt/share/GA_2AF_SK.key";
 	static String stegFSPartition = "/mnt/stegfs-2/";	
-	*/
+	
 
     static String authToken ="";
     static int currentLayer = 0;
     static  String accessTokenL1 = "1"; //TODO: generate access token from user input + auth token
     static  String accessTokenL2 = "2";
 
-
+/*
     public static void main(String args[])  throws Exception {
         mainApp frame = new mainApp( );
         frame.setVisible(true);
 
-    }
+    }*/
 
     public mainApp(){
-        setTitle( "StegFS" );
+        setTitle( "StegDrop" );
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600,600);
@@ -90,7 +91,7 @@ public class mainApp extends JFrame{
 
         JPanel p3 = new JPanel();
         p3.setBounds(0,70,600,35);
-        JLabel l3 = new JLabel("User's password:");
+        JLabel l3 = new JLabel("User password:");
         JTextField t3 = new JPasswordField(37);
         p3.add( l3 );
         p3.add( t3 );
@@ -107,10 +108,14 @@ public class mainApp extends JFrame{
                     file_2AF = "file://" + t1.getText();
                     file_stegMetaStorage = t2.getText();
                     // key-file authentication
-                    URI uri = new URI( file_2AF );
-                    String key = Auth.getKeyFile( uri );
+                    //URI uri = new URI( file_2AF );
+                    //String key = Auth.getKeyFile( uri );
+                    
+                    String key = "eaa8d66f0f460171bcf2890e5b2b1afaad0f5897e174b5506789b7bbdf848c53"; // TODO change to input
+                    String password = "eaa8d66f0f460171bcf2890e5b2b1afaad0f5897e174b5506789b7bbdf848c53"; // TODO change to input
+                    
                     // 2FA authentication
-                    authToken = Auth.calculateAuthToken( t3.getText() ,key);
+                    authToken = Auth.calculateAuthToken(password ,key);
 
 
 
@@ -124,10 +129,11 @@ public class mainApp extends JFrame{
         JPanel p5 = new JPanel();
         p5.setBounds(0,140,600,400);
         JTextArea textArea = new JTextArea(50, 30);
+       /*
         PrintStream printStream = new PrintStream(new CustomOutputStream(textArea));
         System.setOut(printStream);
         System.setErr(printStream);
-        p5.add( textArea );
+        p5.add( textArea ); */
 
 
         getContentPane().add(p1);
@@ -139,7 +145,8 @@ public class mainApp extends JFrame{
 
     public void runStegFS() throws Exception {
         
-        System.out.println( "DropSteg is starting");
+        System.out.println("STEGDROP - Starting");
+        //metaStorage.erase();
         new StegFS_Thread().start();
     }
 

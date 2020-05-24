@@ -78,7 +78,7 @@ public class callBash {
 			
 			String filename = file_auth.split(":")[0];
 			command("cp " + mainApp.stegFolder + filename + " " + mainApp.stegFSPartition + file_auth);
-			System.out.println("Write to stegfs: " + file_auth);
+		//	System.out.println("Write to stegfs: " + file_auth);
 				
 		}
 	
@@ -88,10 +88,10 @@ public class callBash {
      * file_auth must be in the format of String (file:authentication)
      */
 	public static void readFromStegFS(String file_auth) {
-		System.out.println(file_auth);
+		
 			String filename = file_auth.split(":")[0];
 			command("cp " + mainApp.stegFSPartition + file_auth + " "+ mainApp.stegFolder + filename);
-			System.out.println(filename + " fetched from stegfs");
+			System.out.println("STEGDROP - " + filename + " \t \t fetched from steganographic file system and dropped to " + mainApp.stegFolder);
 				
 		}
 	
