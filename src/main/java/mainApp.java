@@ -11,7 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 
 
-public class StegFS_GUI extends JFrame{
+public class mainApp extends JFrame{
 
     static String file_2AF = "file:///home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/keyfile.txt";
     static String file_stegMetaStorage = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/metaStorage.db";
@@ -33,13 +33,13 @@ public class StegFS_GUI extends JFrame{
     static  String accessTokenL2 = "2";
 
 
-    /*public static void main(String args[])  throws Exception {
-        StegFS_GUI frame = new StegFS_GUI( );
+    public static void main(String args[])  throws Exception {
+        mainApp frame = new mainApp( );
         frame.setVisible(true);
 
-    }*/
+    }
 
-    public StegFS_GUI(){
+    public mainApp(){
         setTitle( "StegFS" );
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

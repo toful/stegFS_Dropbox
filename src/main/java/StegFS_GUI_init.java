@@ -72,7 +72,7 @@ public class StegFS_GUI_init extends JFrame{
                     }
                     else {
                         dispose();
-                        StegFS_GUI f = new StegFS_GUI();
+                        mainApp f = new mainApp();
                         f.setVisible(true);
                     }
                 }

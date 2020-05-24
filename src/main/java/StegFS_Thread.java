@@ -32,7 +32,7 @@ public class StegFS_Thread extends Thread{
         while (1==1) { // TODO: change to while(keyfile pendrive is connected) to implement kill-switch functionality
 
             try {
-                fileOperations.scanDirectory(StegFS_GUI.stegFolder);
+                fileOperations.scanDirectory(mainApp.stegFolder);
             } catch (Exception e) {
                 e.printStackTrace();
             }
