@@ -18,7 +18,7 @@ public class Auth {
 	 * Generates the key/QR to set up the 2AF account in Google Authenticator app
 	 * @return the key we are going to use to validate the 2AF
 	 */
-	public static String generate2AF(){
+	public static GoogleAuthenticatorKey generate2AF(){
 		GoogleAuthenticator authenticator = new GoogleAuthenticator();
 		GoogleAuthenticatorKey secretKey = authenticator.createCredentials();
 		GoogleAuthenticatorQRGenerator qr = new GoogleAuthenticatorQRGenerator();
@@ -26,7 +26,7 @@ public class Auth {
 		System.out.println( "Please, scan the QR of the following link in your Google Authenticator app:\n\t" +
 				qr.getOtpAuthURL("SegoFS", "StefoFS_User", secretKey) +
 				"\nor write manually the following code:\n\t" + secretKey.getKey() );
-		return secretKey.getKey();
+		return secretKey;
 	}
 
 	/**

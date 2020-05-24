@@ -4,9 +4,9 @@ import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
 
-import stegfs_dropbox.Auth;
-import stegfs_dropbox.callBash;
-import stegfs_dropbox.metaStorage;
+//import stegfs_dropbox.Auth;
+//import stegfs_dropbox.callBash;
+//import stegfs_dropbox.metaStorage;
 
 import java.io.*;
 import java.net.URI;
@@ -68,7 +68,7 @@ public class mainApp {
 		File f = new File( googleAuth_2AF );
 		if( !f.isFile() ) {
 			try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter( googleAuth_2AF ))) {
-				String fileContent = Auth.generate2AF();
+				String fileContent = Auth.generate2AF().getKey();
 				bufferedWriter.write(fileContent);
 			} catch (IOException e) {
 				// Exception handling

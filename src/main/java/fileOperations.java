@@ -59,7 +59,7 @@ public class fileOperations {
 	 * 		if yes: ignore. 
 	 * 		if not: generate a random salt, add it to the metadata store, generate a per-file authenticator, then write the file to stegFS
 	  
-	  @param input The path to the directory
+	  @param file The path to the directory
 	 * 
 	*/
 	public static void processFile(File file) throws Exception {
@@ -112,7 +112,7 @@ public class fileOperations {
 	public static void importFromStegFs() throws InvalidKeyException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchPaddingException, BadPaddingException, IOException {
 		
 		// decrypt the metadata storage and get a list of all files
-		metaStorage.loadDecrypt("/mnt/share/metaStorage.db");
+		metaStorage.loadDecrypt(mainApp.file_stegMetaStorage );
 		List<String> listOfFiles = metaStorage.getAllFiles();
 		
 		// loop through the list of all files and fetch the metadata of each file

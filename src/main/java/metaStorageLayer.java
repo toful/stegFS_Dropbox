@@ -1,4 +1,4 @@
-package stegfs_dropbox;
+//package stegfs_dropbox;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,8 +24,6 @@ import javax.crypto.SealedObject;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-
-
 
 
 /**

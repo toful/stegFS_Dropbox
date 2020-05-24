@@ -22,7 +22,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SealedObject;
 import javax.crypto.spec.SecretKeySpec;
 
-import stegfs_dropbox.metadata;
+//import stegfs_dropbox.metadata;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
