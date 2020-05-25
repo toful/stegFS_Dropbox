@@ -65,8 +65,8 @@ public class callBash {
 			
 			// Gutmann file erase: find all content on /mnt/ramdisk, force to write 50 times randomly, then all zeros
 			// http://manpages.ubuntu.com/manpages/trusty/man1/shred.1.html
-			command("find " + mainApp.StegDropFolder + " -type f -print0 | xargs -0 shred -fuz n- 50 -u;"
-					+ "rm -r " + mainApp.StegDropFolder +"/*"); // remove empty sub-directories
+			// command("find " + mainApp.StegDropFolder + " -type f -print0 | xargs -0 shred -fuz n- 50 -u;"); // temporary disabled
+			command ("rm -r " + mainApp.StegDropFolder +"/*");
 		}
 	
 	
