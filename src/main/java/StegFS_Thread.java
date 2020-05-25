@@ -21,7 +21,7 @@ public class StegFS_Thread extends Thread{
  			metaStorage.switchLayer(mainApp.layerAuth);
  		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | ClassNotFoundException
  				| BadPaddingException | IOException e1) {
- 			// TODO Auto-generated catch block
+ 			
  			e1.printStackTrace();
  		}
     	
@@ -46,6 +46,7 @@ public class StegFS_Thread extends Thread{
 
         // StegDrop daemon
         while (fileOperations.heartbeat(mainApp.keyFile) == true && mainApp.terminate == false) {
+        	
 
             try {
                 fileOperations.scanDirectory(mainApp.StegDropFolder);
@@ -62,7 +63,7 @@ public class StegFS_Thread extends Thread{
         try {
 			fileOperations.suicide();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
     }

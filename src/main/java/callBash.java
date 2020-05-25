@@ -78,7 +78,6 @@ public class callBash {
 			
 			String filename = file_auth.split(":")[0];
 			command("cp " + mainApp.StegDropFolder + filename + " " + mainApp.stegFSPartition + file_auth);
-		//	System.out.println("Write to stegfs: " + file_auth);
 				
 		}
 	
@@ -91,13 +90,43 @@ public class callBash {
 		
 			String filename = file_auth.split(":")[0];
 			command("cp " + mainApp.stegFSPartition + file_auth + " "+ mainApp.StegDropFolder + filename);
-			System.out.println("STEGDROP - " + filename + " \t \t fetched from steganographic file system and dropped to " + mainApp.StegDropFolder);
+			System.out.println("STEGDROP - " + filename + "fetched from steganographic file system");
 				
 		}
 	
 	
+	/**
+     * Unmount StegDrop folder
+     * 
+     */
 
+	public static void unmountStegDrop() {
 	
+		command("umount " + mainApp.StegDropFolder);	
+	}
+	
+	
+	/**
+     * Unmount steganographic file system
+     * 
+     */
+
+	public static void unmountFileSystem() {
+	
+		command("umount " + mainApp.stegFSPartition);	
+	}
+	
+	
+	/**
+     * Clear bash history
+     * 
+     */
+
+	public static void clearHistory() {
+	
+		command("history -c");	
+		command("history -w");	
+	}
 
 	
 	 

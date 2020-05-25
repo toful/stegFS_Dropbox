@@ -84,8 +84,8 @@ public class fileOperations {
 			//stegfs write filename:
 			
 			String passPerFile = Auth.calcPassPerFile(mainApp.authToken, salt);
-			callBash.writeToStegFS(file.getName() + ":" + mainApp.authToken); //TODO: change to passperfile (static token used for testing)
-			System.out.println("STEGDROP - file" + file.getName() + " saved to steganographic storage. Secret: " + passPerFile );
+			callBash.writeToStegFS(file.getName() + ":" + mainApp.authToken);
+			System.out.println("STEGDROP - file" + file.getName() + " saved to steganographic storage. Secret (8/32 chars): " + passPerFile.substring(0, 8));
 			System.out.println();
 		}
 	}
@@ -123,13 +123,6 @@ public class fileOperations {
 		// loop through the list of all files and fetch the metadata of each file
 		for (int i=0; i<listOfFiles.size(); i++) {
 			String filename = listOfFiles.get(i);
-			
-			/* TODO: change static authToken to token XOR salt
-			String salt = metaStorage.getSalt(filename);
-			// only proceed if salt is available
-			if (salt !=null) {
-			String passPerFile = Auth.calcPassPerFile(authToken, salt);
-			*/
 			
 			// get file from stegFS and write it to the stegdrop folder
 			callBash.readFromStegFS(filename + ":" + mainApp.authToken);
@@ -169,27 +162,29 @@ public class fileOperations {
 	public static void suicide() throws InterruptedException {
 		
 		System.out.println("SELF DESTROYING");
+		
+		// erase
 		System.out.println("      - Erasing StegDrop folder (Gutmann)");
-		// 
-		TimeUnit.SECONDS.sleep(1); // sleep to wait for bash command execution
-		System.out.println("      - destroying RAM-disk");
 		//destroyRamDisk()
-		TimeUnit.SECONDS.sleep(3);
+		TimeUnit.SECONDS.sleep(3); // sleep to wait for bash command execution
+		System.out.println("      - destroying RAM-disk");
+		
+	
+		// unmount
+		TimeUnit.SECONDS.sleep(1);
 		System.out.println("      - unmounting partitions");
-		//TODO unmount partitions
+		//callBash.unmountStegDrop();
+		//callBash.unmountFileSystem();
+		
+		
+		// clear bash history
 		TimeUnit.SECONDS.sleep(1);
 		System.out.println("      - cleaning bash history");
-		//TODO clear bash history
-		TimeUnit.SECONDS.sleep(1);
-		System.out.println("      - cleaning bash history");
+		//callBash.clearHistory();
 		
 		System.out.println("      - DONE");
 		
-		
-		
-		
+	
 	}
-	
-	
 
 }
