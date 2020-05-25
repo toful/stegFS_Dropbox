@@ -70,17 +70,25 @@ public class Auth {
 	  @return A string containing the hashed password (SHA256) in hex
 	 * 
 	*/
-	public static String getPassword() {
+	public static String hashPassword(String input) {
 		
-		System.out.println("Please enter your password");
-		
-		// read password silently from console
-		char[] input = System.console().readPassword();
-		String password = String.copyValueOf(input);
-		
+
 		// create SHA256(password), stored in hex
-		String hashedPassword = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);   
+		String hashedPassword = org.apache.commons.codec.digest.DigestUtils.sha256Hex(input);   
 		return hashedPassword;
+	}
+	
+	
+	/**
+	 * Generate SHA256 from input string
+	  @return A string containing the hashed password (SHA256) in hex
+	 * 
+	*/
+	public static String sha256(String input) {
+		
+		// create SHA256(input), stored in hex
+		String hash = org.apache.commons.codec.digest.DigestUtils.sha256Hex(input);   
+		return hash;
 	}
 	
 	
@@ -116,6 +124,7 @@ public class Auth {
 	    if (c >= 'a' && c <= 'f') {
 	        return c - 'a' + 10;
 	    }
+	    
 	    throw new IllegalArgumentException();
 	}
 	

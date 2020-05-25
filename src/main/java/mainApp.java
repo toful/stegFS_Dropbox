@@ -21,7 +21,7 @@ public class mainApp extends JFrame{
     static String stegFSPartition = "/mnt/stegfs-2/"; // adjust this to your partition
     */
    
-	static String file_2AF = "/mnt/share/keyfile.txt";
+	static String keyFile = "/mnt/share/keyfile.txt";
 	static String file_stegMetaStorage = "/mnt/share/metaStorage.db";
 	static String stegFolder = "/mnt/StegDrop/";
 	static String googleAuth_2AF = "/mnt/share/GA_2AF_SK.key";
@@ -29,16 +29,17 @@ public class mainApp extends JFrame{
 	
 
     static String authToken ="";
+    static String layerAuth;
     static int currentLayer = 0;
     static  String accessTokenL1 = "1"; //TODO: generate access token from user input + auth token
     static  String accessTokenL2 = "2";
 
-/*
+
     public static void main(String args[])  throws Exception {
         mainApp frame = new mainApp( );
         frame.setVisible(true);
 
-    }*/
+    }
 
     public mainApp(){
         setTitle( "StegDrop" );
@@ -91,13 +92,20 @@ public class mainApp extends JFrame{
 
         JPanel p3 = new JPanel();
         p3.setBounds(0,70,600,35);
-        JLabel l3 = new JLabel("User password:");
+        JLabel l3 = new JLabel("User password: ");
         JTextField t3 = new JPasswordField(37);
         p3.add( l3 );
         p3.add( t3 );
+        
+        JPanel p6 = new JPanel();
+        p6.setBounds(0,105,600,35);
+        JLabel l6 = new JLabel("Storage layer:   ");
+        JTextField t6 = new JPasswordField(37);
+        p6.add( l6 );
+        p6.add( t6 );
 
         JPanel p4 = new JPanel();
-        p4.setBounds(0,105,600,35);
+        p4.setBounds(0,160,600,35);
         JButton b3 = new JButton("Run StegDrop");
         p4.add( b3 );
 
@@ -105,20 +113,25 @@ public class mainApp extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    file_2AF = "file://" + t1.getText();
+                    keyFile = "file://" + t1.getText();
                     file_stegMetaStorage = t2.getText();
-                    // key-file authentication
-                    //URI uri = new URI( file_2AF );
-                    //String key = Auth.getKeyFile( uri );
                     
-                    String key = "eaa8d66f0f460171bcf2890e5b2b1afaad0f5897e174b5506789b7bbdf848c53"; // TODO change to input
-                    String password = "eaa8d66f0f460171bcf2890e5b2b1afaad0f5897e174b5506789b7bbdf848c53"; // TODO change to input
+                    // key-file authentication
+                    URI uri = new URI(keyFile);
+                    String key = Auth.getKeyFile( uri );
+                    
+                    //String key = "eaa8d66f0f460171bcf2890e5b2b1afaad0f5897e174b5506789b7bbdf848c53"; // TODO change to input
+                    //String password = "eaa8d66f0f460171bcf2890e5b2b1afaad0f5897e174b5506789b7bbdf848c53"; // TODO change to input
+                    layerAuth = Auth.sha256(t6.getText());
+                    String password = Auth.hashPassword(t3.getText());
+           
                     
                     // 2FA authentication
                     authToken = Auth.calculateAuthToken(password ,key);
-
-
-
+                   
+                    
+                    
+                   
                     runStegFS();
                 } catch (Exception exception) {
                     exception.printStackTrace();
@@ -127,7 +140,7 @@ public class mainApp extends JFrame{
         });
 
         JPanel p5 = new JPanel();
-        p5.setBounds(0,140,600,400);
+        p5.setBounds(0,200,600,600);
         JTextArea textArea = new JTextArea(50, 30);
        /*
         PrintStream printStream = new PrintStream(new CustomOutputStream(textArea));
@@ -141,6 +154,7 @@ public class mainApp extends JFrame{
         getContentPane().add(p3);
         getContentPane().add(p4);
         getContentPane().add(p5);
+        getContentPane().add(p6);
     }
 
     public void runStegFS() throws Exception {

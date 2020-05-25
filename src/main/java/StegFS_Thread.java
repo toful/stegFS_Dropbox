@@ -12,6 +12,17 @@ public class StegFS_Thread extends Thread{
     }
 
     public void run() {
+    	
+    	// switch to the requested sub-layer
+    	try {
+ 			metaStorage.switchLayer(mainApp.layerAuth);
+ 		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | ClassNotFoundException
+ 				| BadPaddingException | IOException e1) {
+ 			// TODO Auto-generated catch block
+ 			e1.printStackTrace();
+ 		}
+    	
+    	// fetch all files from steganographic file system
         try {
             fileOperations.importFromStegFs();
         } catch (InvalidKeyException e) {
@@ -27,9 +38,11 @@ public class StegFS_Thread extends Thread{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+       
 
         // StegDrop daemon
-        while (1==1) { // TODO: change to while(keyfile pendrive is connected) to implement kill-switch functionality
+        while (fileOperations.heartbeat(mainApp.keyFile)) {
 
             try {
                 fileOperations.scanDirectory(mainApp.stegFolder);
@@ -37,11 +50,13 @@ public class StegFS_Thread extends Thread{
                 e.printStackTrace();
             }
             try {
-                TimeUnit.SECONDS.sleep(10);
+                TimeUnit.SECONDS.sleep(5);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        // self destroy
+        fileOperations.suicide();
     }
 
 

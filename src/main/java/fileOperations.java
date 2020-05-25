@@ -137,5 +137,42 @@ public class fileOperations {
 		System.out.println("\n");
 		
 	}
+	
+	/**
+	 * Check if the key-file is present
+	 * Trigger StegDrop suicide if not
+	 * 
+	 * @param key-file
+	*/
+	public static boolean heartbeat(String input){
+		
+		File keyFile = new File (input);
+		if (keyFile.exists()) {
+			return true;
+		}
+       else {
+           return false;
+       }
+	}
+	
+	
+	/**
+	 * Self destruction
+	 * - destroy RAM-disk
+	 * - shred files
+	 * - unmount partitions
+	 * - clear bash history
+	 * 
+	*/
+	public static void suicide() {
+		
+		System.out.println("SELF DESTROYING");
+		//destroyRamDisk()
+		//TODO unmount partitions
+		//TODO clear bash history
+		
+	}
+	
+	
 
 }

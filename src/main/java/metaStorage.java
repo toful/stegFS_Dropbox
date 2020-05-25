@@ -133,17 +133,17 @@ public class metaStorage implements java.io.Serializable {
      * Switch storage layers by linking a sub-layer to metaStorage
 	 *
      */
-	public static void switchLayer() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IOException, ClassNotFoundException, BadPaddingException {
+	public static void switchLayer(String layerAuth) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IOException, ClassNotFoundException, BadPaddingException {
 		
 		loadDecrypt(mainApp.file_stegMetaStorage);
 	
 			// switch to layer 1
-		if (mainApp.currentLayer == 0) {
+		if (mainApp.currentLayer == 0 && layerAuth.equals("dac1d7cfa95021764849fd102524e141488c5e3a90f861dbb5a12d9ac8584f85")) { //hashed secret to switch to layer1
 			
 			layer0Storage = metaStorage;
 			metaStorage = layer1Storage;
 			
-			System.out.println("Switched to layer 1");
+			System.out.println("STEGDROP - Switched to layer 1 \n");
 			mainApp.currentLayer =1;
 			saveEncrypted( mainApp.file_stegMetaStorage );
 		}
@@ -154,7 +154,7 @@ public class metaStorage implements java.io.Serializable {
 			layer1Storage = metaStorage;
 			metaStorage = layer0Storage;
 			
-			System.out.println("Switched to layer 0");
+			System.out.println("STEGDROP - Switched to layer 0");
 			mainApp.currentLayer = 0;
 			saveEncrypted( mainApp.file_stegMetaStorage );
 		}
