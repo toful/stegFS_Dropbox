@@ -15,21 +15,20 @@ import java.util.concurrent.TimeUnit;
 
 public class mainApp extends JFrame{
 
-	 /*
+    /*
     static String keyFile = "file:///home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/keyfile.txt";
     static String metaStorageDB = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/metaStorage.db";
     static String StegDropFolder = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/stegdrop/";
     static String googleAuthKey = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/GA_2AF_SK.key";
     static String stegFSPartition = "/mnt/stegfs-2/"; // adjust this to your partition
     */
-   
 
 	static String keyFile = "/media/privacyprotection/PENDRIVE/key.file";
 	static String metaStorageDB = "/media/privacyprotection/PENDRIVE/metaStorage.db";
 	static String StegDropFolder = "/mnt/StegDrop/";
 	static String googleAuthKey = "//media/privacyprotection/PENDRIVE/GA_2AF_SK.key";
 	static String stegFSPartition = "/mnt/stegfs-2/";	
-
+    
 
     static String authToken ="";
     static String layerAuth;
@@ -108,9 +107,11 @@ public class mainApp extends JFrame{
         p6.add( t6 );
 
         JPanel p4 = new JPanel();
-        p4.setBounds(0,160,800,35);
+        p4.setBounds(0,140,800,35);
         JButton b3 = new JButton("Run StegDrop");
         p4.add( b3 );
+        JButton b5 = new JButton("Exit");
+        p4.add( b5 );
         
 
         b3.addActionListener(new ActionListener() {
@@ -139,14 +140,7 @@ public class mainApp extends JFrame{
                 }
             }
         });
-        
-        
-        
-        JPanel p5 = new JPanel();
-        p5.setBounds(0,200,800,35);
-        JButton b5 = new JButton("Exit");
-        p5.add( b5 );
-        
+
         b5.addActionListener(new ActionListener() {
         	 public void actionPerformed(ActionEvent e) {
         		 terminate = true;
@@ -156,32 +150,27 @@ public class mainApp extends JFrame{
 
         
         JPanel p7 = new JPanel();
-        p7.setBounds(0,300,800,600);
-        JTextArea textArea = new JTextArea(45, 55);
+        p7.setBounds(0,200,800,600);
+        JTextArea textArea = new JTextArea(30, 55);
         
-        
-        DefaultCaret caret = (DefaultCaret)textArea.getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-    
-        JScrollPane scrollpane = new JScrollPane(textArea);
-        scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        p7.add(scrollpane);
-        
-     
-        /*
+        /*DefaultCaret caret = (DefaultCaret)textArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);*/
+
+        textArea.setWrapStyleWord(true);
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea,
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        p7.add( scrollPane );
+
         PrintStream printStream = new PrintStream(new CustomOutputStream(textArea));
         System.setOut(printStream);
         System.setErr(printStream);
-        */
-        
-        p7.add(textArea);
-
 
         getContentPane().add(p1);
         getContentPane().add(p2);
         getContentPane().add(p3);
         getContentPane().add(p4);
-        getContentPane().add(p5);
         getContentPane().add(p6);
         getContentPane().add(p7);
     }
