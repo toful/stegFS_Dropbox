@@ -165,7 +165,7 @@ public class fileOperations {
 		
 		// erase
 		System.out.println("      - Erasing StegDrop folder (Gutmann)");
-		//destroyRamDisk()
+		destroyRamDisk()
 		TimeUnit.SECONDS.sleep(3); // sleep to wait for bash command execution
 		System.out.println("      - destroying RAM-disk");
 		
