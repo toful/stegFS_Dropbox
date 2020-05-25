@@ -31,7 +31,7 @@ public class callBash {
             while ( (line = br.readLine()) != null )
                 output.add(line);
 
-            // return if something was done, TODO: add a timeout
+            // return if something was done
             if (0 != process.waitFor())
                 return null;
 
@@ -47,13 +47,13 @@ public class callBash {
 
     
     /**
-     * Create a RAM disk at /mnt/StegDrop
+     * Create a RAM disk, mounted to StegDrop folder
      * 
      */
 	public static void createRamDisk() {
 			
 			// create a ramdisk and mount it to the stegdrop folder
-			command("mount -t ramfs ramfs " + mainApp.stegFolder);
+			command("mount -t ramfs ramfs " + mainApp.StegDropFolder);
 		}
 	
 	
@@ -65,8 +65,8 @@ public class callBash {
 			
 			// Gutmann file erase: find all content on /mnt/ramdisk, force to write 50 times randomly, then all zeros
 			// http://manpages.ubuntu.com/manpages/trusty/man1/shred.1.html
-			command("find " + mainApp.stegFolder + " -type f -print0 | xargs -0 shred -fuz n- 50 -u;"
-					+ "rm -r " + mainApp.stegFolder +"/*"); // remove empty sub-directories
+			command("find " + mainApp.StegDropFolder + " -type f -print0 | xargs -0 shred -fuz n- 50 -u;"
+					+ "rm -r " + mainApp.StegDropFolder +"/*"); // remove empty sub-directories
 		}
 	
 	
@@ -77,7 +77,7 @@ public class callBash {
 	public static void writeToStegFS(String file_auth) {
 			
 			String filename = file_auth.split(":")[0];
-			command("cp " + mainApp.stegFolder + filename + " " + mainApp.stegFSPartition + file_auth);
+			command("cp " + mainApp.StegDropFolder + filename + " " + mainApp.stegFSPartition + file_auth);
 		//	System.out.println("Write to stegfs: " + file_auth);
 				
 		}
@@ -90,8 +90,8 @@ public class callBash {
 	public static void readFromStegFS(String file_auth) {
 		
 			String filename = file_auth.split(":")[0];
-			command("cp " + mainApp.stegFSPartition + file_auth + " "+ mainApp.stegFolder + filename);
-			System.out.println("STEGDROP - " + filename + " \t \t fetched from steganographic file system and dropped to " + mainApp.stegFolder);
+			command("cp " + mainApp.stegFSPartition + file_auth + " "+ mainApp.StegDropFolder + filename);
+			System.out.println("STEGDROP - " + filename + " \t \t fetched from steganographic file system and dropped to " + mainApp.StegDropFolder);
 				
 		}
 	

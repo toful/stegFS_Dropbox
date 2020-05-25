@@ -13,6 +13,9 @@ public class StegFS_Thread extends Thread{
 
     public void run() {
     	
+    	//create RAM disk
+    	//callBash.createRamDisk();
+    	
     	// switch to the requested sub-layer
     	try {
  			metaStorage.switchLayer(mainApp.layerAuth);
@@ -42,10 +45,10 @@ public class StegFS_Thread extends Thread{
        
 
         // StegDrop daemon
-        while (fileOperations.heartbeat(mainApp.keyFile)) {
+        while (fileOperations.heartbeat(mainApp.keyFile) == true) {
 
             try {
-                fileOperations.scanDirectory(mainApp.stegFolder);
+                fileOperations.scanDirectory(mainApp.StegDropFolder);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -56,7 +59,12 @@ public class StegFS_Thread extends Thread{
             }
         }
         // self destroy
-        fileOperations.suicide();
+        try {
+			fileOperations.suicide();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
 

@@ -13,26 +13,26 @@ import java.util.concurrent.TimeUnit;
 
 public class mainApp extends JFrame{
 
-	 /*
-    static String file_2AF = "file:///home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/keyfile.txt";
-    static String file_stegMetaStorage = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/metaStorage.db";
-    static String stegFolder = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/stegdrop/";
-    static String googleAuth_2AF = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/GA_2AF_SK.key";
-    static String stegFSPartition = "/mnt/stegfs-2/"; // adjust this to your partition
-    */
-   
-	static String keyFile = "/mnt/share/keyfile.txt";
-	static String file_stegMetaStorage = "/mnt/share/metaStorage.db";
-	static String stegFolder = "/mnt/StegDrop/";
-	static String googleAuth_2AF = "/mnt/share/GA_2AF_SK.key";
-	static String stegFSPartition = "/mnt/stegfs-2/";	
 	
+    static String keyFile = "file:///home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/keyfile.txt";
+    static String metaStorageDB = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/metaStorage.db";
+    static String StegDropFolder = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/stegdrop/";
+    static String googleAuthKey = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/GA_2AF_SK.key";
+    static String stegFSPartition = "/mnt/stegfs-2/"; // adjust this to your partition
+    
+   
+    /*
+	static String keyFile = "/media/privacyprotection/PENDRIVE/key.file";
+	static String metaStorageDB = "/media/privacyprotection/PENDRIVE/metaStorage.db";
+	static String StegDropFolder = "/mnt/StegDrop/";
+	static String googleAuthKey = "//media/privacyprotection/PENDRIVE/GA_2AF_SK.key";
+	static String stegFSPartition = "/mnt/stegfs-2/";	
+	*/
 
     static String authToken ="";
     static String layerAuth;
     static int currentLayer = 0;
-    static  String accessTokenL1 = "1"; //TODO: generate access token from user input + auth token
-    static  String accessTokenL2 = "2";
+ 
 
 
     public static void main(String args[])  throws Exception {
@@ -113,25 +113,22 @@ public class mainApp extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    keyFile = "file://" + t1.getText();
-                    file_stegMetaStorage = t2.getText();
+                    keyFile = t1.getText();
+                    String urikeyFile = "file://" + t1.getText();
+                    metaStorageDB = t2.getText();
                     
-                    // key-file authentication
-                    URI uri = new URI(keyFile);
+                    // key-file authentication (2FA)
+                    URI uri = new URI(urikeyFile);
                     String key = Auth.getKeyFile( uri );
                     
-                    //String key = "eaa8d66f0f460171bcf2890e5b2b1afaad0f5897e174b5506789b7bbdf848c53"; // TODO change to input
-                    //String password = "eaa8d66f0f460171bcf2890e5b2b1afaad0f5897e174b5506789b7bbdf848c53"; // TODO change to input
+                    // get password
                     layerAuth = Auth.sha256(t6.getText());
                     String password = Auth.hashPassword(t3.getText());
-           
-                    
-                    // 2FA authentication
+   
+                    // calculate authentication token
                     authToken = Auth.calculateAuthToken(password ,key);
                    
                     
-                    
-                   
                     runStegFS();
                 } catch (Exception exception) {
                     exception.printStackTrace();
@@ -160,7 +157,7 @@ public class mainApp extends JFrame{
     public void runStegFS() throws Exception {
         
         System.out.println("STEGDROP - Starting");
-        //metaStorage.erase();
+        //metaStorage.erase(); // RESET
         new StegFS_Thread().start();
     }
 

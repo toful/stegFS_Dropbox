@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.NoSuchPaddingException;
@@ -65,7 +66,7 @@ public class fileOperations {
 	public static void processFile(File file) throws Exception {
 		
 		// check if a file is already stored in metaStorage, add if not
-		metaStorage.loadDecrypt(mainApp.file_stegMetaStorage );
+		metaStorage.loadDecrypt(mainApp.metaStorageDB );
 		
 		if (metaStorage.contains(file.getName())){
 		
@@ -77,7 +78,7 @@ public class fileOperations {
 			System.out.println("STEGDROP - file " + file.getName() + " added to metadata storage");
 			
 			// update metadata storage to disk
-			metaStorage.saveEncrypted(mainApp.file_stegMetaStorage );
+			metaStorage.saveEncrypted(mainApp.metaStorageDB );
 			
 			//write the file to stegfs
 			//stegfs write filename:
@@ -113,8 +114,8 @@ public class fileOperations {
 	public static void importFromStegFs() throws InvalidKeyException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchPaddingException, BadPaddingException, IOException {
 		
 		// decrypt the metadata storage and get a list of all files
-		System.out.println("STEGDROP - Decrypting metadata storage (" + mainApp.file_stegMetaStorage + ")" );
-		metaStorage.loadDecrypt(mainApp.file_stegMetaStorage );
+		System.out.println("STEGDROP - Decrypting metadata storage (" + mainApp.metaStorageDB + ")" );
+		metaStorage.loadDecrypt(mainApp.metaStorageDB );
 		
 		System.out.println("STEGDROP - Reading all files from steganographic storage \n");
 		List<String> listOfFiles = metaStorage.getAllFiles();
@@ -163,13 +164,29 @@ public class fileOperations {
 	 * - unmount partitions
 	 * - clear bash history
 	 * 
+	 * 
 	*/
-	public static void suicide() {
+	public static void suicide() throws InterruptedException {
 		
 		System.out.println("SELF DESTROYING");
+		System.out.println("      - Erasing StegDrop folder (Gutmann)");
+		// 
+		TimeUnit.SECONDS.sleep(1); // sleep to wait for bash command execution
+		System.out.println("      - destroying RAM-disk");
 		//destroyRamDisk()
+		TimeUnit.SECONDS.sleep(3);
+		System.out.println("      - unmounting partitions");
 		//TODO unmount partitions
+		TimeUnit.SECONDS.sleep(1);
+		System.out.println("      - cleaning bash history");
 		//TODO clear bash history
+		TimeUnit.SECONDS.sleep(1);
+		System.out.println("      - cleaning bash history");
+		
+		System.out.println("      - DONE");
+		
+		
+		
 		
 	}
 	

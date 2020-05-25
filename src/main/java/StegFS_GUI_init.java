@@ -11,14 +11,14 @@ import java.net.URL;
 import java.util.Scanner;
 
 /**
- * GUI for the StegFS functionalities implemented
+ * GUI for the StegDrop functionalities implemented
  *
  */
 
 
 public class StegFS_GUI_init extends JFrame{
 
-    static String googleAuth_2AF = "/home/toful/Dropbox/Uni/Master/PrivacyProtection/stegFS_Dropbox/test/GA_2AF_SK.key";
+	
 
     public static void main(String args[]){
         StegFS_GUI_init frame = new StegFS_GUI_init( );
@@ -29,12 +29,12 @@ public class StegFS_GUI_init extends JFrame{
      * Log in/Sign in frame
      */
     public StegFS_GUI_init(){
-        setTitle("StegFS");
+        setTitle("StegDrop");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300,200);
 
         JPanel p1 = new JPanel();
-        JLabel label = new JLabel("Welcome to StegFS GUI");
+        JLabel label = new JLabel("Welcome to StegDrop GUI");
         p1.add( label );
         p1.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
 
@@ -55,7 +55,7 @@ public class StegFS_GUI_init extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 String secretKey="";
-                try(BufferedReader bufferedReader = new BufferedReader(new FileReader( googleAuth_2AF ))) {
+                try(BufferedReader bufferedReader = new BufferedReader(new FileReader( mainApp.googleAuthKey ))) {
                     secretKey = bufferedReader.readLine();
                 } catch (FileNotFoundException ex) {
                     // Exception handling
@@ -84,7 +84,7 @@ public class StegFS_GUI_init extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Check if file already exists?
-                try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter( googleAuth_2AF ))) {
+                try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter( mainApp.googleAuthKey ))) {
                     GoogleAuthenticatorKey secretKey = Auth.generate2AF();
                     GoogleAuthenticatorQRGenerator qr = new GoogleAuthenticatorQRGenerator();
                     ImageIcon icon = new ImageIcon( ImageIO.read(new URL( qr.getOtpAuthURL("SegoFS", "StefoFS_User", secretKey) )));

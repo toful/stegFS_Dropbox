@@ -125,7 +125,7 @@ public class metaStorage implements java.io.Serializable {
 		layer0Storage = new HashMap<String, metadata>();
 		layer1Storage = new HashMap<String, metadata>();
 		
-		saveEncrypted( mainApp.file_stegMetaStorage );
+		saveEncrypted( mainApp.metaStorageDB );
 	}
 	
 	
@@ -135,7 +135,7 @@ public class metaStorage implements java.io.Serializable {
      */
 	public static void switchLayer(String layerAuth) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IOException, ClassNotFoundException, BadPaddingException {
 		
-		loadDecrypt(mainApp.file_stegMetaStorage);
+		loadDecrypt(mainApp.metaStorageDB);
 	
 			// switch to layer 1
 		if (mainApp.currentLayer == 0 && layerAuth.equals("dac1d7cfa95021764849fd102524e141488c5e3a90f861dbb5a12d9ac8584f85")) { //hashed secret to switch to layer1
@@ -145,7 +145,7 @@ public class metaStorage implements java.io.Serializable {
 			
 			System.out.println("STEGDROP - Switched to layer 1 \n");
 			mainApp.currentLayer =1;
-			saveEncrypted( mainApp.file_stegMetaStorage );
+			saveEncrypted( mainApp.metaStorageDB );
 		}
 				
 		// switch to default layer 0
@@ -156,7 +156,7 @@ public class metaStorage implements java.io.Serializable {
 			
 			System.out.println("STEGDROP - Switched to layer 0");
 			mainApp.currentLayer = 0;
-			saveEncrypted( mainApp.file_stegMetaStorage );
+			saveEncrypted( mainApp.metaStorageDB );
 		}
 		
 	}
