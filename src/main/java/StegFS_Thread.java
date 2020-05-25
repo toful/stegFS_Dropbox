@@ -45,7 +45,7 @@ public class StegFS_Thread extends Thread{
        
 
         // StegDrop daemon
-        while (fileOperations.heartbeat(mainApp.keyFile) == true) {
+        while (fileOperations.heartbeat(mainApp.keyFile) == true && mainApp.terminate == false) {
 
             try {
                 fileOperations.scanDirectory(mainApp.StegDropFolder);

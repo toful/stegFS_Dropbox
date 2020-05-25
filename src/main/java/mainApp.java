@@ -32,6 +32,7 @@ public class mainApp extends JFrame{
     static String authToken ="";
     static String layerAuth;
     static int currentLayer = 0;
+    static boolean terminate = false;
  
 
 
@@ -108,6 +109,7 @@ public class mainApp extends JFrame{
         p4.setBounds(0,160,600,35);
         JButton b3 = new JButton("Run StegDrop");
         p4.add( b3 );
+        
 
         b3.addActionListener(new ActionListener() {
             @Override
@@ -135,8 +137,23 @@ public class mainApp extends JFrame{
                 }
             }
         });
-
+        
+        
+        
         JPanel p5 = new JPanel();
+        p5.setBounds(0,180,600,35);
+        JButton b5 = new JButton("Exit");
+        p5.add( b5 );
+        
+        b5.addActionListener(new ActionListener() {
+        	 public void actionPerformed(ActionEvent e) {
+        		 terminate = true;
+             }
+       
+        });
+
+        
+        JPanel p7 = new JPanel();
         p5.setBounds(0,200,600,600);
         JTextArea textArea = new JTextArea(50, 30);
        /*
@@ -152,6 +169,7 @@ public class mainApp extends JFrame{
         getContentPane().add(p4);
         getContentPane().add(p5);
         getContentPane().add(p6);
+        getContentPane().add(p7);
     }
 
     public void runStegFS() throws Exception {
